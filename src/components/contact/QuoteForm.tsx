@@ -16,14 +16,17 @@ export function QuoteForm({ extended = false }: { extended?: boolean }) {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = event.currentTarget;
-    const data = Object.fromEntries(new FormData(form).entries()) as Values;
+    const formData = new FormData(form);
+    const get = (key: string) => String(formData.get(key) ?? "").trim();
     const next: Values = {};
 
-    if (!data.firstName?.trim()) next.firstName = "Please enter your first name.";
-    if (!data.lastName?.trim()) next.lastName = "Please enter your last name.";
-    if (!/^[\d\s()+-]{7,}$/.test(data.phone ?? "")) next.phone = "Please enter a valid phone number.";
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email ?? "")) next.email = "Please enter a valid email address.";
-    if (!data.serviceType) next.serviceType = "Please choose a service.";
+    if (!get("firstName")) next["firstName"] = "Please enter your first name.";
+    if (!get("lastName")) next["lastName"] = "Please enter your last name.";
+    if (!/^[\d\s()+-]{7,}$/.test(get("phone")))
+      next["phone"] = "Please enter a valid phone number.";
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(get("email")))
+      next["email"] = "Please enter a valid email address.";
+    if (!get("serviceType")) next["serviceType"] = "Please choose a service.";
 
     setErrors(next);
     if (Object.keys(next).length > 0) {
@@ -32,14 +35,14 @@ export function QuoteForm({ extended = false }: { extended?: boolean }) {
     }
 
     const lines = [
-      `Name: ${data.firstName} ${data.lastName}`,
-      `Phone: ${data.phone}`,
-      `Email: ${data.email}`,
-      `Service: ${data.serviceType}`,
-      data.propertyType ? `Property: ${data.propertyType}` : "",
-      data.preferredDate ? `Preferred date: ${data.preferredDate}` : "",
-      data.preferredTime ? `Preferred time: ${data.preferredTime}` : "",
-      data.message ? `Message: ${data.message}` : "",
+      `Name: ${get("firstName")} ${get("lastName")}`,
+      `Phone: ${get("phone")}`,
+      `Email: ${get("email")}`,
+      `Service: ${get("serviceType")}`,
+      get("propertyType") ? `Property: ${get("propertyType")}` : "",
+      get("preferredDate") ? `Preferred date: ${get("preferredDate")}` : "",
+      get("preferredTime") ? `Preferred time: ${get("preferredTime")}` : "",
+      get("message") ? `Message: ${get("message")}` : "",
     ].filter(Boolean);
 
     window.location.href = `mailto:${site.email}?subject=${encodeURIComponent(
@@ -55,19 +58,19 @@ export function QuoteForm({ extended = false }: { extended?: boolean }) {
       className="flex flex-col gap-5 rounded-3xl border border-border bg-card p-6 shadow-soft sm:p-8"
     >
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field id="firstName" label="First Name" error={errors.firstName} required>
+        <Field id="firstName" label="First Name" error={errors["firstName"]} required>
           <input id="firstName" name="firstName" autoComplete="given-name" className={fieldClass} />
         </Field>
-        <Field id="lastName" label="Last Name" error={errors.lastName} required>
+        <Field id="lastName" label="Last Name" error={errors["lastName"]} required>
           <input id="lastName" name="lastName" autoComplete="family-name" className={fieldClass} />
         </Field>
-        <Field id="phone" label="Phone" error={errors.phone} required>
+        <Field id="phone" label="Phone" error={errors["phone"]} required>
           <input id="phone" name="phone" type="tel" autoComplete="tel" className={fieldClass} />
         </Field>
-        <Field id="email" label="Email" error={errors.email} required>
+        <Field id="email" label="Email" error={errors["email"]} required>
           <input id="email" name="email" type="email" autoComplete="email" className={fieldClass} />
         </Field>
-        <Field id="serviceType" label="Service Type" error={errors.serviceType} required>
+        <Field id="serviceType" label="Service Type" error={errors["serviceType"]} required>
           <select id="serviceType" name="serviceType" defaultValue="" className={fieldClass}>
             <option value="" disabled>
               Select a service
@@ -145,7 +148,7 @@ function Field({
 }: {
   id: string;
   label: string;
-  error?: string;
+  error?: string | undefined;
   required?: boolean;
   children: React.ReactNode;
 }) {
