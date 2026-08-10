@@ -37,7 +37,7 @@ export function Navbar() {
                     to={item.to}
                     activeOptions={{ exact: item.to === "/" }}
                     activeProps={{ className: "text-accent-foreground bg-primary-soft" }}
-                    className="inline-flex items-center rounded-full px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+                    className="inline-flex items-center rounded-full px-2.5 py-2 text-sm font-medium whitespace-nowrap text-muted-foreground transition-colors hover:bg-muted hover:text-foreground xl:px-3"
                   >
                     {item.label}
                   </Link>
@@ -51,12 +51,12 @@ export function Navbar() {
               href={site.phoneHref}
               variant="ghost"
               size="sm"
-              className="hidden xl:inline-flex"
+              className="hidden whitespace-nowrap 2xl:inline-flex"
             >
               <Phone className="size-4" aria-hidden="true" />
               {site.phoneDisplay}
             </ButtonLink>
-            <ButtonLink to="/contact" size="sm" className="hidden sm:inline-flex">
+            <ButtonLink to="/contact" size="sm" className="hidden whitespace-nowrap sm:inline-flex">
               Get a Free Quote
             </ButtonLink>
             <a

@@ -6,7 +6,7 @@ export function Logo({ inverted = false }: { inverted?: boolean }) {
   return (
     <Link
       to="/"
-      className="flex min-w-0 items-center gap-2.5 rounded-full"
+      className="flex min-w-0 shrink-0 items-center gap-2.5 rounded-full"
       aria-label={`${site.name} — home`}
     >
       <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground shadow-soft">
@@ -16,8 +16,8 @@ export function Logo({ inverted = false }: { inverted?: boolean }) {
         <span
           className={
             inverted
-              ? "truncate font-display text-base font-semibold text-primary-foreground"
-              : "truncate font-display text-base font-semibold text-foreground"
+              ? "font-display text-base font-semibold whitespace-nowrap text-primary-foreground"
+              : "font-display text-base font-semibold whitespace-nowrap text-foreground"
           }
         >
           {site.name}
